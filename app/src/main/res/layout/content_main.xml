@@ -1,21 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+    android:id="@+id/screen"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="push.example.a99101.goodweather.MainActivity"
-    tools:showIn="@layout/app_bar_main"
-    android:id="@+id/container">
+    tools:showIn="@layout/activity_main" tools:context=".MainActivity"
+    android:background="@drawable/bg_list_gradient">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/currentlyTempLabel"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffff"
+        android:textSize="100sp"
+        android:gravity="center_horizontal"
+        android:text="--"
+        tools:text="83"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentTop="false" />
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/degreeIcon"
+        android:src="@drawable/degree"
+        android:layout_alignTop="@+id/currentlyTempLabel"
+        android:layout_toRightOf="@+id/currentlyTempLabel"
+        android:layout_toEndOf="@+id/currentlyTempLabel"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timeLabel"
+        android:layout_above="@+id/weatherIcon"
+        android:layout_centerHorizontal="true"
+        android:textColor="#80ffffff"
+        android:gravity="center_horizontal"
+        android:text="..."
+        tools:text="3:30 PM"
+        android:layout_marginTop="25dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/weatherIcon"
+        android:src="@drawable/partly_cloudy"
+        android:layout_above="@+id/currentlyTempLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Getting Location"
+        tools:text="Orlando, Florida"
+        android:id="@+id/dailyLocationLabel"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffffff"
+        android:layout_marginTop="5dp"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/timeLabel"
+        android:layout_marginBottom="10dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/refreshImageView"
+        android:layout_above="@+id/timeLabel"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/refresh"
+        android:layout_alignParentTop="true" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@+id/refreshImageView" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/greetingLabel"
+        android:textColor="#ffffffff"
+        android:layout_marginTop="3dp"
+        android:layout_below="@+id/currentlyTempLabel"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:text="Grabbing weather!"
+        tools:text="Good afternoon, its rather hot outside.\nIt might rain"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/greetingLabel"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/humidtyPercipLayout">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="강수 학률"
+                android:id="@+id/percipLabel"
+                android:textColor="#80ffffff"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/percipValue"
+                android:textColor="#ffffffff"
+                android:textSize="24sp"
+                android:layout_gravity="center_horizontal"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="습도    "
+                android:id="@+id/humidityLabel"
+                android:textColor="#80ffffff"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/humidityValue"
+                android:textColor="#ffffffff"
+                android:textSize="24sp"
+                android:layout_gravity="center_horizontal"
+                tools:text="73%"/>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/hourlyDailyLayout">
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="시간별 날씨"
+            android:id="@+id/hourlyButton"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:background="#40ffffff"
+            android:layout_marginRight="2dp" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dailyButton"
+            android:layout_weight="1"
+            android:text="주간별 날씨"
+            android:textColor="@android:color/white"
+            android:background="#40ffffff"
+            android:layout_marginLeft="2dp" />
+    </LinearLayout>
+
+</RelativeLayout>
