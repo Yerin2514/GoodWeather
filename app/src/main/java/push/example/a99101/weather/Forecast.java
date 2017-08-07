@@ -1,37 +1,35 @@
-package lpadron.me.weatherly.weather;
+package push.example.a99101.weather;
 
 
-import lpadron.me.weatherly.R;
+//import lpadron.me.weatherly.R;
+import push.example.a99101.R;
 
-/**
- * Created by luispadron on 11/15/15.
- */
 public class Forecast {
-    private Currently currently;
-    private Daily[] dailyWeather;
-    private Hourly[] hourlyWeather;
+    private push.example.a99101.weather.Currently currently;
+    private push.example.a99101.weather.Daily[] dailyWeather;
+    private push.example.a99101.weather.Hourly[] hourlyWeather;
 
-    public Currently getCurrently() {
+    public push.example.a99101.weather.Currently getCurrently() {
         return currently;
     }
 
-    public void setCurrently(Currently currently) {
+    public void setCurrently(push.example.a99101.weather.Currently currently) {
         this.currently = currently;
     }
 
-    public Daily[] getDailyWeather() {
+    public push.example.a99101.weather.Daily[] getDailyWeather() {
         return dailyWeather;
     }
 
-    public void setDailyWeather(Daily[] dailyWeather) {
+    public void setDailyWeather(push.example.a99101.weather.Daily[] dailyWeather) {
         this.dailyWeather = dailyWeather;
     }
 
-    public Hourly[] getHourlyWeather() {
+    public push.example.a99101.weather.Hourly[] getHourlyWeather() {
         return hourlyWeather;
     }
 
-    public void setHourlyWeather(Hourly[] hourlyWeather) {
+    public void setHourlyWeather(push.example.a99101.weather.Hourly[] hourlyWeather) {
         this.hourlyWeather = hourlyWeather;
     }
 

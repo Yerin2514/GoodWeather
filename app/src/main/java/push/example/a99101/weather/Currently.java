@@ -1,10 +1,7 @@
-package lpadron.me.weatherly.weather;
-
+package push.example.a99101.weather;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-
-import lpadron.me.weatherly.R;
 
 public class Currently {
     private long time;

@@ -1,5 +1,4 @@
-package lpadron.me.weatherly.weather;
-
+package push.example.a99101.weather;
 import android.os.Parcel;
 import android.os.Parcelable;
 

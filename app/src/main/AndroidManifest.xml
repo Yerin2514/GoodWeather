@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="push.example.a99101.goodweather">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA7xbH64MOsIy2KLFDZxEgdr3MQ4vYEfeU"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -19,7 +30,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Greeting"></activity>
+        <activity
+            android:name=".goodweather.ThirdActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".goodweather.FirstActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="push.example.a99101.goodweather.MainActivity" />
+        </activity>
+        <activity
+            android:name=".goodweather.SecondActivity"
+            android:label="@string/title_activity_hourly_forecast"
+            android:parentActivityName=".goodweather.FirstActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="push.example.a99101.goodweather.MainActivity" />
+        </activity>
     </application>
+
 
 </manifest>

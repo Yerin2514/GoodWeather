@@ -1,15 +1,17 @@
 package push.example.a99101.goodweather;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +21,33 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import push.example.a99101.weather.Currently;
+import push.example.a99101.weather.Daily;
+import push.example.a99101.weather.Forecast;
+import push.example.a99101.weather.Hourly;
+import push.example.a99101.weather.UsersLocation;
+
+import static com.google.android.gms.location.LocationServices.FusedLocationApi;
 
 /**
  * Created by 99101 on 2017-08-02.
@@ -34,8 +58,8 @@ public class FirstActivity extends Fragment {
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final String DAILY_FORECAST = "DAILY_FORECAST";
     public static final String HOURLY_FORECAST = "HOURLY_FORECAST";
-    private lpadron.me.weatherly.weather.Forecast forecast;
     private GoogleApiClient mGoogleApiClient;
+    private Forecast forecast;
     private Location location;
     private LocationRequest locationRequest;
     private Context context = this;
@@ -45,14 +69,20 @@ public class FirstActivity extends Fragment {
     /* Butter knife references */
     @Bind(R.id.currentlyTempLabel)
     TextView tempLabel;
-    @Bind(R.id.timeLabel) TextView timeLabel;
+    @Bind(R.id.timeLabel)
+    TextView timeLabel;
     @Bind(R.id.weatherIcon)
     ImageView iconView;
-    @Bind(R.id.dailyLocationLabel) TextView locationLabel;
-    @Bind(R.id.greetingLabel) TextView greetingLabel;
-    @Bind(R.id.humidityValue) TextView humidityLabel;
-    @Bind(R.id.percipValue) TextView percipLabel;
-    @Bind(R.id.refreshImageView) ImageView refreshImageView;
+    @Bind(R.id.dailyLocationLabel)
+    TextView locationLabel;
+    @Bind(R.id.greetingLabel)
+    TextView greetingLabel;
+    @Bind(R.id.humidityValue)
+    TextView humidityLabel;
+    @Bind(R.id.percipValue)
+    TextView percipLabel;
+    @Bind(R.id.refreshImageView)
+    ImageView refreshImageView;
     @Bind(R.id.progressBar)
     ProgressBar progressBar;
 
@@ -61,7 +91,6 @@ public class FirstActivity extends Fragment {
     private int contentView;
 
     @Nullable
-    @Override
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +120,7 @@ public class FirstActivity extends Fragment {
 
 
     public void setContentView(int contentView) {
-       this.contentView = contentView;
+        this.contentView = contentView;
     }
 
 
@@ -112,9 +141,9 @@ public class FirstActivity extends Fragment {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
-        if(mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
     }
@@ -123,11 +152,21 @@ public class FirstActivity extends Fragment {
     /* Location related methods */
     @Override
     public void onConnected(Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         location = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         LocationServices
                 .FusedLocationApi
-                .requestLocationUpdates(mGoogleApiClient, locationRequest, this);
+                .requestLocationUpdates(mGoogleApiClient, locationRequest, (LocationListener) this);
     }
 
     @Override
@@ -151,16 +190,18 @@ public class FirstActivity extends Fragment {
 
     protected void stopLocationUpdates() {
         Log.i("STOPPING" , "STOPPING LOCATION UPDATES");
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                mGoogleApiClient, this);
+        FusedLocationApi.removeLocationUpdates(
+                mGoogleApiClient, (LocationListener) this);
     }
 
     /* Application methods */
 
     private void getForecast() {
-        String apiKey = "a45f738558f376111212234d47a716f6";
+       // String apiKey = "a45f738558f376111212234d47a716f6";
+        String apiKey="AIzaSyA7xbH64MOsIy2KLFDZxEgdr3MQ4vYEfeU";
         String finalUrl = "https://api.forecast.io/forecast/" + apiKey + "/" + latitude + ","
                 + longitude;
+
 
         if (isNetwork()){
             toggleProgressBar();
@@ -207,12 +248,15 @@ public class FirstActivity extends Fragment {
                         Log.e(TAG, "EXCEPTION CAUGHT:  ", e);
                     }
                 }
+
+
+
+
             });
         }else {
             reportNetworkError();
         }
     }
-
     private void toggleProgressBar() {
         if (progressBar.getVisibility() == View.INVISIBLE){
             refreshImageView.setVisibility(View.INVISIBLE);
@@ -222,8 +266,8 @@ public class FirstActivity extends Fragment {
             refreshImageView.setVisibility(View.VISIBLE);
         }
     }
-    private lpadron.me.weatherly.weather.Forecast parseForecastInfo(String json) throws JSONException {
-        lpadron.me.weatherly.weather.Forecast forecast = new lpadron.me.weatherly.weather.Forecast();
+    private Forecast parseForecastInfo(String json) throws JSONException {
+        Forecast forecast = new Forecast();
 
         forecast.setCurrently(getCurrentlyWeather(json));
         forecast.setDailyWeather(getDailyWeather(json));
@@ -232,8 +276,7 @@ public class FirstActivity extends Fragment {
         return forecast;
     }
 
-
-    private lpadron.me.weatherly.weather.Daily[] getDailyWeather(String json) throws JSONException {
+    private Daily[] getDailyWeather(String json) throws JSONException {
         JSONObject baseData = new JSONObject(json);
         String timeZone = baseData.getString("timezone");
         //Get the hourly JSON object
@@ -241,14 +284,14 @@ public class FirstActivity extends Fragment {
         //Get the data array from the JSON hourly object
         JSONArray dailyData = daily.getJSONArray("data");
 
-        lpadron.me.weatherly.weather.Daily[] dailyWeather = new lpadron.me.weatherly.weather.Daily[dailyData.length()];
+        Daily[] dailyWeather = new Daily[dailyData.length()];
 
         for (int i = 0; i < dailyData.length(); i++) {
            /* Get a single json object from the json array
             * and get all the required information, save it into an
              * hour object, then save that object into the list*/
             JSONObject jsonObj = dailyData.getJSONObject(i);
-            lpadron.me.weatherly.weather.Daily day = new lpadron.me.weatherly.weather.Daily();
+            Daily day = new Daily();
 
             day.setIcon(jsonObj.getString("icon"));
             day.setSummary(jsonObj.getString("summary"));
@@ -264,7 +307,7 @@ public class FirstActivity extends Fragment {
         return dailyWeather;
     }
 
-    private lpadron.me.weatherly.weather.Hourly[] getHourlyWeather(String json) throws JSONException {
+    private Hourly[] getHourlyWeather(String json) throws JSONException {
         JSONObject baseData = new JSONObject(json);
         //Get timezon from JSON
         String timeZone = baseData.getString("timezone");
@@ -273,14 +316,14 @@ public class FirstActivity extends Fragment {
         //Get the data array from the JSON hourly object
         JSONArray hourlyData = hourly.getJSONArray("data");
 
-        lpadron.me.weatherly.weather.Hourly[] hourlyWeather = new lpadron.me.weatherly.weather.Hourly[25];
+        Hourly[] hourlyWeather = new Hourly[25];
 
         for (int i = 0; i < 25; i++) {
            /* Get a single json object from the json array
             * and get all the required information, save it into an
              * hour object, then save that object into the list*/
             JSONObject jsonObj = hourlyData.getJSONObject(i);
-            lpadron.me.weatherly.weather.Hourly hour = new lpadron.me.weatherly.weather.Hourly();
+            Hourly hour = new Hourly();
 
             hour.setIcon(jsonObj.getString("icon"));
             hour.setSummary(jsonObj.getString("summary"));
@@ -299,14 +342,15 @@ public class FirstActivity extends Fragment {
         return hourlyWeather;
     }
 
-    private lpadron.me.weatherly.weather.Currently getCurrentlyWeather(String json) throws JSONException {
+
+    private Currently getCurrentlyWeather(String json) throws JSONException {
         JSONObject baseData = new JSONObject(json);
         String timeZone = baseData.getString("timezone");
 
         /* Get Current Weather data and create Weather object with data */
         JSONObject currentData = baseData.getJSONObject("currently");
 
-        lpadron.me.weatherly.weather.Currently currently = new lpadron.me.weatherly.weather.Currently();
+        Currently currently = new Currently();
 
         currently.setHumidity(currentData.getDouble("humidity"));
         currently.setIcon(currentData.getString("icon"));
@@ -320,7 +364,7 @@ public class FirstActivity extends Fragment {
     }
 
     private void updateData() {
-        lpadron.me.weatherly.weather.Currently currently = forecast.getCurrently();
+        Currently currently = forecast.getCurrently();
         /* Set the background color */
         RelativeLayout screen = (RelativeLayout) findViewById(R.id.screen);
         ScreenColor screenColor = new ScreenColor(currently.getTime(), currently.getTimeZone());
@@ -339,7 +383,7 @@ public class FirstActivity extends Fragment {
         Drawable drawable = getResources().getDrawable(currently.getIconId());
         iconView.setImageDrawable(drawable);
         /* Get the users city name */
-        locationLabel.setText(lpadron.me.weatherly.weather.UsersLocation.getUsersLocation(latitude, longitude, this)) ;
+        locationLabel.setText(UsersLocation.getUsersLocation(latitude, longitude, this)) ;
     }
 
 
@@ -365,21 +409,21 @@ public class FirstActivity extends Fragment {
         error.show(getFragmentManager(), "network error");
     }
 
-    @OnClick (R.id.refreshImageView)
+    @OnClick(R.id.refreshImageView)
     public void refreshTheData(View v) {
         getForecast();
     }
 
     @OnClick (R.id.dailyButton)
     public void startDailyActivity(View view) {
-        Intent intent = new Intent(this, DailyForecastActivity.class);
+        Intent intent = new Intent(this, ThirdActivity.class);
         intent.putExtra(DAILY_FORECAST, forecast.getDailyWeather());
         startActivity(intent);
     }
 
     @OnClick (R.id.hourlyButton)
     public void startHourlyActivity(View view) {
-        Intent intent = new Intent(this, HourlyForecastActivity.class);
+        Intent intent = new Intent(this, SecondActivity.class);
         intent.putExtra(HOURLY_FORECAST, forecast.getHourlyWeather());
         startActivity(intent);
     }
