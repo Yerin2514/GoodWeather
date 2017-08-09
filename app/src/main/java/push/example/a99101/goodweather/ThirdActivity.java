@@ -1,22 +1,55 @@
 package push.example.a99101.goodweather;
 
+import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.os.Parcelable;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * Created by 99101 on 2017-08-02.
- */
+import java.util.Arrays;
 
-public class ThirdActivity extends Fragment {
-    View v;
-    @Nullable
+import push.example.a99101.adapters.DailyAdapter;
+import push.example.a99101.weather.Daily;
+import push.example.a99101.weather.UsersLocation;
+
+public class ThirdActivity extends ListActivity {
+
+    private Daily[] dailyWeather;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.third_activity, container, false);
-        return v;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.third_activity);
+
+        Intent intent = getIntent();
+        Parcelable[] parcelables = intent.getParcelableArrayExtra(FirstActivity.DAILY_FORECAST);
+        dailyWeather = Arrays.copyOf(parcelables, parcelables.length, Daily[].class);
+        /* Set the city/state at bottom of screen */
+        TextView dailyLocationLabel = (TextView) findViewById(R.id.dailyLocationLabel);
+        dailyLocationLabel.setText(
+                UsersLocation.getUsersLocation(
+                        dailyWeather[0].getLatitude(),
+                        dailyWeather[0].getLongitude(),
+                        this));
+
+        DailyAdapter adapter = new DailyAdapter(this, dailyWeather);
+        setListAdapter(adapter);
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        String day = dailyWeather[position].getDayOfTheWeek();
+        String condition = dailyWeather[position].getSummary();
+        String highTemp = dailyWeather[position].getTempHigh() + "";
+        String lowTemp = dailyWeather[position].getTempLow() + "";
+
+        String message = String.format("%s\n%s\nHigh: %s\nLow: %s", day,condition,highTemp,lowTemp);
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
     }
 }

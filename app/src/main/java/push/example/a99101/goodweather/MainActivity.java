@@ -1,12 +1,12 @@
 package push.example.a99101.goodweather;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,14 +14,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Fragment FirstActivity;
-    private Fragment SecondActivity;
-    private Fragment ThirdActivity;
-    private Fragment FourthActivity;
+    private Activity FirstActivity;
+    private Activity SecondActivity;
+    private Activity ThirdActivity;
+    private Activity FourthActivity;
+    Intent intent;
 
 
     @Override
@@ -34,10 +36,10 @@ public class MainActivity extends AppCompatActivity
         ThirdActivity = new ThirdActivity();
         FourthActivity = new FourthActivity();
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+       /* FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.container, FirstActivity);
         transaction.addToBackStack(null);
-        transaction.commit();
+        transaction.commit();*/
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -78,6 +80,20 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -89,17 +105,21 @@ public class MainActivity extends AppCompatActivity
 
 
         if (id == R.id.weather1) {
-            transaction.replace(R.id.container, FirstActivity);
+            intent = new Intent(this, FirstActivity.class);
+            startActivity(intent);
         } else if (id == R.id.weather2) {
-            transaction.replace(R.id.container, SecondActivity);
+            intent = new Intent(this, SecondActivity.class);
+            startActivity(intent);
         } else if (id == R.id.weather3) {
-            transaction.replace(R.id.container, ThirdActivity);
+            intent = new Intent(this, ThirdActivity.class);
+            startActivity(intent);
         } else if (id == R.id.weather4) {
-            transaction.replace(R.id.container, FourthActivity);
+            intent = new Intent(this, FourthActivity.class);
+            startActivity(intent);
         }
 
-        transaction.addToBackStack(null);
-        transaction.commit();
+        /*transaction.addToBackStack(null);
+        transaction.commit();*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

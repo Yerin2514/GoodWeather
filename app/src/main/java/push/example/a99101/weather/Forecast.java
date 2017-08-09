@@ -1,8 +1,7 @@
 package push.example.a99101.weather;
 
 
-//import lpadron.me.weatherly.R;
-import push.example.a99101.R;
+import push.example.a99101.goodweather.R;
 
 public class Forecast {
     private push.example.a99101.weather.Currently currently;

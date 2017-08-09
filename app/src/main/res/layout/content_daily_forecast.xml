@@ -6,8 +6,8 @@
     android:paddingBottom="5dp"
     android:paddingTop="5dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_daily_forecast"
-    tools:context="lpadron.me.weatherly.ui.DailyForecastActivity"
+    tools:showIn="@layout/third_activity"
+    tools:context="push.example.a99101.goodweather.ThirdActivity"
     android:id="@+id/dailyListScreen"
     android:background="@drawable/bg_list_gradient">
 

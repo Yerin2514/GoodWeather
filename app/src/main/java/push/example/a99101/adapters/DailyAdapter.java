@@ -1,6 +1,5 @@
 package push.example.a99101.adapters;
 
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,15 +8,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
+import push.example.a99101.goodweather.R;
+import push.example.a99101.weather.Daily;
 
 
 public class DailyAdapter extends BaseAdapter {
 
     private Context context;
-    private push.example.a99101.weather.Daily[] dailyList;
+    private Daily[] dailyList;
 
-    public DailyAdapter(Context context, push.example.a99101.weather.Daily[] dailyList) {
+    public DailyAdapter(Context context, Daily[] dailyList) {
         this.context = context;
         this.dailyList = dailyList;
     }
@@ -56,7 +56,7 @@ public class DailyAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        lpadron.me.weatherly.weather.Daily day = dailyList[position];
+        Daily day = dailyList[position];
 
         holder.iconImageView.setImageResource(day.getIconId());
         holder.tempLabel.setText(day.getTempHigh() + "");

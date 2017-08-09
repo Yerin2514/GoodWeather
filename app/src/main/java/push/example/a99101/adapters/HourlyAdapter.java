@@ -10,8 +10,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import lpadron.me.weatherly.R;
-import lpadron.me.weatherly.weather.Hourly;
+import push.example.a99101.goodweather.R;
+import push.example.a99101.weather.Hourly;
 
 public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.HourlyViewHolder>{
 
