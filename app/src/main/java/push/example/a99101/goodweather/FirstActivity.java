@@ -68,7 +68,7 @@ public class FirstActivity extends Activity implements GoogleApiClient.OnConnect
 
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
-                setContentView(R.layout.first_activity);
+                setContentView(R.layout.first_activity_content_main);
         /* Butter knife creates the variables */
                 ButterKnife.bind(this);
 
